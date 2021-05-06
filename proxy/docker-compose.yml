@@ -1,0 +1,84 @@
+version: '3.9'
+services:
+  loadbalancer:
+    image: 'haproxy:lts-alpine'
+    volumes:
+      - .:/usr/local/etc/haproxy
+    ports:
+      - 80:80
+      - 3000:3000
+      - 3003:3003
+      - 3006:3006
+      - 3009:3009
+    depends_on:
+      - gateway
+      - microserviceSum
+      - microserviceSubstraction
+      - microserviceMultiplication
+      - microserviceDivision
+  gateway:
+    image: devopsfaith/krakend
+    ports:
+      - '8000:8080'
+    volumes:
+      - .:/etc/krakend
+  microserviceSum:
+    build: '../services/sum'
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - 3001:3002-:80
+    environment:
+      PORT: 80
+      HOST: '0.0.0.0'
+  microserviceSubstraction:
+    build: '../services/rest'
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - 3004-3005:80
+    environment:
+      PORT: 80
+      HOST: '0.0.0.0'
+  microserviceMultiplication:
+    build: '../services/mult'
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - 3007-3008:80
+    environment:
+      PORT: 80
+      HOST: '0.0.0.0'
+  microserviceDivision:
+    build: '../services/div'
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - 3010-3011:80
+    environment:
+      PORT: 80
+      HOST: '0.0.0.0'

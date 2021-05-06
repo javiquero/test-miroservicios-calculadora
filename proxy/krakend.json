@@ -1,0 +1,82 @@
+{
+    "version": 2,
+    "name": "API Gateway pruebas Calculadora por microservicios",
+    "port": "8080",
+    "cache_ttl": "3600s",
+    "timeout": "3s",
+    "output_encoding": "json",
+    "endpoints": [
+      {
+        "endpoint": "/s",
+        "method": "GET",
+        "concurrent_calls": 3,
+        "backend": [
+          {
+            "encoding": "string",
+            "url_pattern": "/",
+            "host": ["http://__IP__:3000"],
+            "group": "microserviceSum",
+            "extra_config": {
+              "github.com/devopsfaith/krakend/http": {
+                "return_error_details": "microserviceSum"
+              }
+            }
+          }
+        ]
+      },
+	  {
+        "endpoint": "/r",
+        "method": "GET",
+        "concurrent_calls": 3,
+        "backend": [
+          {
+            "encoding": "string",
+            "url_pattern": "/",
+            "host": ["http://__IP__:3001"],
+            "group": "microserviceSubstraction",
+            "extra_config": {
+              "github.com/devopsfaith/krakend/http": {
+                "return_error_details": "microserviceSubstraction"
+              }
+            }
+          }
+        ]
+      },
+	  {
+        "endpoint": "/m",
+        "method": "GET",
+        "concurrent_calls": 3,
+        "backend": [
+          {
+            "encoding": "string",
+            "url_pattern": "/",
+            "host": ["http://__IP__:3002"],
+            "group": "microserviceMultiplication",
+            "extra_config": {
+              "github.com/devopsfaith/krakend/http": {
+                "return_error_details": "microserviceMultiplication"
+              }
+            }
+          }
+        ]
+      },
+	  {
+        "endpoint": "/d",
+        "method": "GET",
+        "concurrent_calls": 3,
+        "backend": [
+          {
+            "encoding": "string",
+            "url_pattern": "/",
+            "host": ["http://__IP__:3003"],
+            "group": "microserviceDivision",
+            "extra_config": {
+              "github.com/devopsfaith/krakend/http": {
+                "return_error_details": "microserviceDivision"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }

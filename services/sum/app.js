@@ -2,7 +2,9 @@ const express = require('express')
 const services = require("./service.js");
 
 const app = express()
-const port = 3000;
+
+const PORT = parseInt(process.env.PORT || '') || 3000
+const HOST = process.env.HOST || '0.0.0.0'
 
 app.post('/', (req, res) => {
     if (req.query.n1 && req.query.n2) 
@@ -11,5 +13,5 @@ app.post('/', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`🚀 launched Sum server - listening at http://localhost:${port}`)
+  console.log(`🚀 launched Sum server - listening at http://${HOST}:${PORT}`)
 })
